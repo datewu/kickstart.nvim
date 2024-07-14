@@ -652,6 +652,12 @@ require('lazy').setup({
           lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
         }
       end,
+      formatters = {
+        svelte_fmt = {
+          command = 'prettier',
+          args = { '--plugin', '/home/r/.nvm/versions/node/v20.15.1/lib/node_modules/prettier-plugin-svelte/plugin.js', '$FILENAME' },
+        },
+      },
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
@@ -659,7 +665,9 @@ require('lazy').setup({
         --
         -- You can use a sub-list to tell conform to run *until* a formatter
         -- is found.
-        -- javascript = { { "prettierd", "prettier" } },
+        javascript = { { 'prettierd', 'prettier' } },
+        html = { { 'prettierd', 'prettier' } },
+        svelte = { 'svelte_fmt' },
       },
     },
   },
