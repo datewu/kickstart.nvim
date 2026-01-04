@@ -363,6 +363,7 @@ require('lazy').setup({
       -- Enable Telescope extensions if they are installed
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
+      pcall(require('telescope').load_extension, 'codecompanion')
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
@@ -399,6 +400,16 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sn', function()
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[S]earch [N]eovim files' })
+
+      -- Shortcut 'cc' for codecompanion chat
+      vim.keymap.set('n', '<leader>ccc', function()
+        require('telescope').extensions.codecompanion.chat()
+      end, { desc = 'CodeCompanion Chat' })
+
+      -- Shortcut 'ca' for codecompanion action
+      vim.keymap.set('n', '<leader>cca', function()
+        require('telescope').extensions.codecompanion.codecompanion()
+      end, { desc = 'CodeCompanion Actions Picker' })
     end,
   },
 
@@ -653,10 +664,9 @@ require('lazy').setup({
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
-        -- You can use a sub-list to tell conform to run *until* a formatter
-        -- is found.
-        javascript = { { 'prettierd', 'prettier' } },
-        html = { { 'prettierd', 'prettier' } },
+        -- FIXED: Use stop_after_first to run *until* a formatter is found.
+        javascript = { 'prettierd', 'prettier', stop_after_first = true },
+        html = { 'prettierd', 'prettier', stop_after_first = true },
       },
     },
   },
