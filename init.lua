@@ -364,6 +364,7 @@ require('lazy').setup({
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
       pcall(require('telescope').load_extension, 'codecompanion')
+      pcall(require('telescope').load_extension, 'floaterm')
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
@@ -401,15 +402,34 @@ require('lazy').setup({
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[S]earch [N]eovim files' })
 
-      -- Shortcut 'cc' for codecompanion chat
-      vim.keymap.set('n', '<leader>ccc', function()
+      -- Shortcut 'lc' for codecompanion chat
+      vim.keymap.set('n', '<leader>lc', function()
         require('telescope').extensions.codecompanion.chat()
       end, { desc = 'CodeCompanion Chat' })
 
-      -- Shortcut 'ca' for codecompanion action
-      vim.keymap.set('n', '<leader>cca', function()
+      -- Shortcut 'la' for codecompanion action
+      vim.keymap.set('n', '<leader>la', function()
         require('telescope').extensions.codecompanion.codecompanion()
       end, { desc = 'CodeCompanion Actions Picker' })
+
+      -- Named Terminal Toggle: Press <leader>tn, type a word (e.g. 'git'), hit Enter
+      vim.keymap.set('n', '<leader>tn', function()
+        vim.ui.input({ prompt = 'Terminal Name: ' }, function(input)
+          if input and input ~= '' then
+            require('custom.floaterm').toggle_terminal(input)
+          end
+        end)
+      end, { desc = '[T]oggle [T]erminal by Name' })
+
+      -- Keymap: Search and Manage Terminals
+      vim.keymap.set('n', '<leader>st', function()
+        require('telescope').extensions.floaterm.floaterm()
+      end, { desc = '[S]earch/Manage [T]erminals' })
+
+      -- Keymap: Toggle the last terminal (No UI needed)
+      vim.keymap.set({ 'n', 't' }, '<leader>tl', function()
+        require('telescope').extensions.floaterm.toggle_last()
+      end, { desc = '[T]oggle [L]ast Terminal' })
     end,
   },
 
@@ -930,5 +950,6 @@ require('lazy').setup({
     },
   },
 })
+
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
